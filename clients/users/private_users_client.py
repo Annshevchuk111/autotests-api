@@ -2,6 +2,18 @@ from typing import TypedDict
 
 from httpx import Response
 from clients.api_client import APIClient
+from clients.private_http_builder import get_private_http_client, AuthenticationUserDict
+
+
+class User(TypedDict):
+    id: str
+    email: str
+    lastName: str
+    firstName: str
+    middleName: str
+
+class GetUserResponseDict(TypedDict):
+    user: User
 
 class UpdateUserRequestDict(TypedDict):
     email: str | None
@@ -21,3 +33,11 @@ class PrivateUsersClient(APIClient):
 
     def delete_users_api(self,user_id: str) -> Response:
         return self.delete(f"/api/v1/users/{user_id}")
+
+    def get_users(self,user_id: str) -> GetUserResponseDict:
+        response = self.get_users_api(user_id)
+        return response.json()
+
+
+def get_private_users_client(user:AuthenticationUserDict) -> PrivateUsersClient:
+    return PrivateUsersClient(client=get_private_http_client(user))
