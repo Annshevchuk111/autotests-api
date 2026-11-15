@@ -1,8 +1,8 @@
 import httpx
-from tools.faker import get_random_email
+from tools.faker  import fake
 
 create_user_payload ={
-  "email": get_random_email(),
+  "email": fake.email(),
   "password": "string",
   "lastName": "string",
   "firstName": "string",
@@ -25,7 +25,7 @@ print(login_response.status_code,login_response_data)
 
 update_user_headers = {"Authorization": f"Bearer {login_response_data['token']['accessToken']}"}
 update_user_payload = {
-  "email": get_random_email(),
+  "email": fake.email(),
   "lastName": "string",
   "firstName": "string",
   "middleName": "string"

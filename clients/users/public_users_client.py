@@ -1,33 +1,17 @@
 from clients.api_client import APIClient
-from typing import TypedDict
 from clients.public_http_builder import get_public_http_client
+from clients.users.users_schema import CreateUserRequestSchema, CreateUserResponseSchema
 
 from httpx import Response
 
-class User(TypedDict):
-    id: str
-    email: str
-    lastName: str
-    firstName: str
-    middleName: str
-
-class CreateUserResponseDict(TypedDict):
-    user: User
-
-class CreateUserRequestDict(TypedDict):
-    email: str
-    password: str
-    lastName: str
-    firstName: str
-    middleName: str
 
 class PublicUsersClient(APIClient):
-    def create_user_api(self, request:CreateUserRequestDict) -> Response:
-        return self.post("/api/v1/users", json=request)
+    def create_user_api(self, request:CreateUserRequestSchema) -> Response:
+        return self.post("/api/v1/users", json=request.model_dump(by_alias=True))
 
-    def create_user(self, request:CreateUserRequestDict) -> CreateUserResponseDict :
+    def create_user(self, request:CreateUserRequestSchema) -> CreateUserResponseSchema :
         response = self.create_user_api(request)
-        return response.json()
+        return CreateUserResponseSchema.model_validate_json(response.text)
 
 
 def get_public_users_client() -> PublicUsersClient:
