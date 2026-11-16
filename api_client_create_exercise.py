@@ -48,14 +48,9 @@ create_course_response = courses_client.crete_course(create_course_request)
 print(create_course_response)
 
 create_exercise_request =CreateExerciseSchema(
-    title="Python",
-    courseId=create_course_response.course.id,
-    maxScore=7,
-    minScore=4,
-    orderIndex=6,
-    description="descript",
-    estimatedTime="10 weeks"
+    courseId=create_course_response.course.id
 )
+print(create_exercise_request)
 create_exercise_response = exercises_client.create_exercise(create_exercise_request)
 print(create_exercise_response)
 print(create_exercise_response.exercise.course_id)
